@@ -1,0 +1,301 @@
+CREATE TYPE relationship_type  AS ENUM
+(
+    'PREREQUISITE',
+    'PROGRESSION',
+    'ALTERNATIVE'
+);
+
+CREATE TYPE user_workspace_role AS ENUM
+(
+    'ADMIN',
+    'COACH',
+    'CLIENT'
+);
+
+CREATE TYPE user_workspace_status AS ENUM
+(
+  'PENDING',
+  'ACTIVE',
+  'SUSPENDED',
+  'REMOVED'
+);
+  
+CREATE TYPE phase_status AS ENUM
+(
+  'PLANNED',
+  'ACTIVE',
+  'COMPLETED',
+  'ARCHIVED'
+);
+  
+CREATE TYPE weekday AS ENUM
+(
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY',
+  'SUNDAY'
+);
+
+CREATE TYPE session_status AS ENUM
+(
+  'PLANNED',
+  'COMPLETED',
+  'SKIPPED'
+);
+
+CREATE TYPE media_type AS ENUM
+(
+  'VIDEO',
+  'IMAGE',
+  'PDF'
+);
+
+CREATE TYPE media_purpose AS ENUM
+(
+  'DEMONSTRATION',
+  'SIDE_VIEW',
+  'FRONT_VIEW',
+  'BACK_VIEW',
+  'REFERENCE',
+  'COMMON_MISTAKE'
+);
+
+
+
+
+CREATE TABLE "movement_relationship" (
+  "movement_relationship_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "source_movement_id" uuid,
+  "target_movement_id" uuid,
+  "relationship_type" relationship_type NOT NULL,
+  PRIMARY KEY ("movement_relationship_id"),
+    FOREIGN KEY ("source_movement_id")
+      REFERENCES "movement"("movement_id"),
+    FOREIGN KEY ("target_movement_id")
+      REFERENCES "movement"("movement_id"),
+  UNIQUE (
+    "source_movement_id",
+    "target_movement_id",
+    "relationship_type"
+    )
+);
+
+CREATE TABLE "user" (
+  "user_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "first_name" varchar (255),
+  "last_name" varchar (255),
+  "email" varchar (255) UNIQUE,
+  "password" varchar (255),
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("user_id")
+);
+
+CREATE TABLE "workspace" (
+  "workspace_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "workspace_name" varchar (255),
+  PRIMARY KEY ("workspace_id")
+);
+
+CREATE TABLE "user_workspace" (
+  "user_workspace_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "user_id" uuid,
+  "workspace_id" uuid,
+  "role" user_workspace_role NOT NULL,
+  "status" user_workspace_status NOT NULL,
+  "joined_at" timestamp,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("user_workspace_id"),
+    FOREIGN KEY ("user_id")
+      REFERENCES "user"("user_id"),
+    FOREIGN KEY ("workspace_id")
+      REFERENCES "workspace"("workspace_id"),
+  UNIQUE("user_id", "workspace_id", "role")
+);
+
+CREATE TABLE "phase" (
+  "phase_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "user_workspace_id" uuid,
+  "name" varchar (255),
+  "description" text,
+  "phase_start" DATE,
+  "phase_end" DATE,
+  "status" phase_status NOT NULL,
+  PRIMARY KEY ("phase_id"),
+    FOREIGN KEY ("user_workspace_id")
+      REFERENCES "user_workspace"("user_workspace_id")
+);
+
+CREATE TABLE "session" (
+  "session_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "phase_id" uuid,
+  "name" varchar (255),
+  "week_number" int,
+  "week_day" weekday NOT NULL,
+  "status" session_status NOT NULL,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("session_id"),
+    FOREIGN KEY ("phase_id")
+      REFERENCES "phase"("phase_id")
+);
+
+CREATE TABLE "category" (
+  "category_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "name" varchar (255),
+  "description" TEXT,
+  PRIMARY KEY ("category_id")
+);
+
+CREATE TABLE "subcategory" (
+  "subcategory_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "category_id" uuid,
+  "name" varchar (255),
+  PRIMARY KEY ("subcategory_id"),
+    FOREIGN KEY ("category_id")
+      REFERENCES "category"("category_id")
+);
+
+
+CREATE TABLE "movement"
+(
+    "movement_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "created_by_user_id" UUID NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "description" TEXT,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+      FOREIGN KEY ("created_by_user_id")
+        REFERENCES "user_workspace"("user_workspace_id")
+);
+
+CREATE TABLE "session_item" (
+  "session_item_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "session_id" uuid,
+  "movement_id" uuid,
+  "display_order" int,
+  "prescription" varchar (255),
+  "coach_notes" text,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("session_item_id"),
+    FOREIGN KEY ("session_id")
+      REFERENCES "session"("session_id"),
+    FOREIGN KEY ("movement_id")
+      REFERENCES "movement"("movement_id")
+); 
+
+
+CREATE TABLE "movement_media" (
+  "movement_media_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "movement_id" uuid,
+  "media_type" media_type NOT NULL,
+  "purpose" media_purpose NOT NULL,
+  "storage_key" varchar (255),
+  "title" varchar (255),
+  "display_order" int,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("movement_media_id"),
+    FOREIGN KEY ("movement_id")
+      REFERENCES "movement"("movement_id")
+);
+
+
+CREATE TABLE "movement_workspace"
+(
+    "movement_id" UUID NOT NULL,
+    "workspace_id" UUID NOT NULL,
+    PRIMARY KEY ("movement_id", "workspace_id"),
+    FOREIGN KEY ("movement_id")
+        REFERENCES "movement"("movement_id"),
+    FOREIGN KEY ("workspace_id")
+        REFERENCES "workspace"("workspace_id")
+);
+
+CREATE TABLE "session_comment" (
+  "session_comment_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "session_id" uuid,
+  "user_workspace_id" uuid,
+  "comment" text,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("session_comment_id"),
+    FOREIGN KEY ("session_id")
+      REFERENCES "session"("session_id"),
+    FOREIGN KEY ("user_workspace_id")
+      REFERENCES "user_workspace"("user_workspace_id")
+);
+
+CREATE TABLE "movement_subcategory" (
+  "movement_id" UUID NOT NULL,
+  "subcategory_id" UUID NOT NULL,
+  PRIMARY KEY ("movement_id", "subcategory_id"),
+    FOREIGN KEY ("subcategory_id")
+      REFERENCES "subcategory"("subcategory_id"),
+    FOREIGN KEY ("movement_id")
+      REFERENCES "movement"("movement_id")
+);
+
+CREATE TABLE "attempt" (
+  "attempt_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "session_item_id" uuid,
+  "user_workspace_id" uuid,
+  "client_comment" text,
+  "coach_feedback" text,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("attempt_id"),
+    FOREIGN KEY ("session_item_id")
+      REFERENCES "session_item"("session_item_id"),
+    FOREIGN KEY ("user_workspace_id")
+      REFERENCES "user_workspace"("user_workspace_id")
+);
+
+CREATE TABLE "attempt_media" (
+  "attempt_media_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "attempt_id" uuid,
+  "media_type" enum,
+  "storage_key" varchar (255),
+  "display_order" int,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("attempt_media_id"),
+    FOREIGN KEY ("attempt_id")
+      REFERENCES "attempt"("attempt_id")
+);
+
+CREATE TABLE "chat" (
+  "chat_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "participant_1_user_workspace_id" uuid,
+  "participant_2_user_workspace_id" uuid,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("chat_id"),
+    FOREIGN KEY ("participant_1_user_workspace_id")
+      REFERENCES "user_workspace"("user_workspace_id"),
+    FOREIGN KEY ("participant_2_user_workspace_id")
+      REFERENCES "user_workspace"("user_workspace_id"),
+  UNIQUE (
+    "participant_1_user_workspace_id", 
+    "participant_2_user_workspace_id"
+    )
+);
+
+CREATE TABLE "message" (
+  "message_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  "chat_id" uuid,
+  "author_user_workspace_id" uuid,
+  "message" text,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY ("message_id"),
+    FOREIGN KEY ("chat_id")
+      REFERENCES "chat"("chat_id"),
+    FOREIGN KEY ("author_user_workspace_id")
+      REFERENCES "user_workspace"("user_workspace_id")
+);
+
