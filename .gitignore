@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# Docker
+postgres-data/
+
+# Eclipse
+.metadata/
+
+# IntelliJ
+*.iml
