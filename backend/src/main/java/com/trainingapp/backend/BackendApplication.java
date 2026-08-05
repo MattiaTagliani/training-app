@@ -1,13 +1,13 @@
-package com.trainingapp.trainingbackend;
+package com.trainingapp.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TrainingbackendApplication {
+public class BackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TrainingbackendApplication.class, args);
+		SpringApplication.run(BackendApplication.class, args);
 	}
 
 }
