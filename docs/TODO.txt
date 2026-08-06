@@ -1,3 +1,1 @@
-repository class or interface?
 
-common entity for created at and updated at

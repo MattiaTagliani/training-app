@@ -1,0 +1,16 @@
+problem: when i press the run button it build correctly the application and after a couple of second it starts an automatic rebuild.
+the second time it still build successfully but it doesn't go well because it finds the 8080 port already occupied (from the first build)
+apparently is a devTools problem
+
+
+QUICK FIX
+added a line in application.properties that says:
+spring.devtools.restart.enabled=false
+
+CMD check
+from terminal in backend folder:
+1. netstat -ano | findstr :8080  --> will see who's listening (it ends with an id)
+2. tasklist | findstr id_from_before  --> will see which process. if it's java.exe, there's the culprit
+3. taskkill /F /IM java.exe --> it ends that process
+4. netstat -ano | findstr :8080 --> this time it shouldn't see anything.
+5. run the application
