@@ -62,3 +62,9 @@ CREATE TYPE media_purpose AS ENUM
   'REFERENCE',
   'COMMON_MISTAKE'
 );
+
+CREATE TYPE user_status AS ENUM (
+    'ACTIVE',
+    'INACTIVE',
+    'DELETED'
+)

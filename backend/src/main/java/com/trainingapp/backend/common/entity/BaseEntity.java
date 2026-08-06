@@ -1,4 +1,4 @@
-package com.trainingapp.backend.common;
+package com.trainingapp.backend.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

@@ -1,12 +1,18 @@
 package com.trainingapp.backend.user.service;
 
-import com.trainingapp.backend.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.trainingapp.backend.user.dto.CreateUserRequest;
+import com.trainingapp.backend.user.dto.UserResponse;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
+import java.util.List;
+import java.util.UUID;
 
-    private final UserRepository repository;
+public interface UserService {
+
+    UserResponse create(CreateUserRequest request);
+
+    UserResponse findById(UUID userId);
+
+    List<UserResponse> getAll();
+
+    void delete(UUID userId);
 }

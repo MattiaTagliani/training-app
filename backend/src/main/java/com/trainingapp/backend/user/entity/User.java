@@ -1,6 +1,6 @@
 package com.trainingapp.backend.user.entity;
 
-import com.trainingapp.backend.common.BaseEntity;
+import com.trainingapp.backend.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,8 +19,19 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
 
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
 }

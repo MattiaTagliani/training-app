@@ -1,9 +1,14 @@
 CREATE TABLE "users" (
   "user_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
   "first_name" varchar (255) NOT NULL,
   "last_name" varchar (255) NOT NULL,
+
   "email" varchar (255) NOT NULL UNIQUE,
   "password" varchar (255) NOT NULL,
+
+  "status" user_status NOT NULL DEFAULT 'ACTIVE',
+
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now()
 );

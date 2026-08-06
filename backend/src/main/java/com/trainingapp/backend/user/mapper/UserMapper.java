@@ -1,5 +1,6 @@
 package com.trainingapp.backend.user.mapper;
 
+import com.trainingapp.backend.user.dto.CreateUserRequest;
 import com.trainingapp.backend.user.dto.UserResponse;
 import com.trainingapp.backend.user.entity.User;
 import org.mapstruct.Mapper;
@@ -8,4 +9,7 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
 
     UserResponse toResponse(User user);
+
+    User toEntity(CreateUserRequest request);
+
 }
