@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface UserService {
 
     UserResponse create(CreateUserRequest request);
+    UserResponse restore(String email);
 
     UserResponse findById(UUID userId);
 

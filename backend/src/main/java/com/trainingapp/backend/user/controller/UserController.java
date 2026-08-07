@@ -1,6 +1,7 @@
 package com.trainingapp.backend.user.controller;
 
 import com.trainingapp.backend.user.dto.CreateUserRequest;
+import com.trainingapp.backend.user.dto.RestoreUserRequest;
 import com.trainingapp.backend.user.dto.UserResponse;
 import com.trainingapp.backend.user.service.UserService;
 import jakarta.validation.Valid;
@@ -24,6 +25,13 @@ public class UserController {
             @RequestBody CreateUserRequest request) {
 
         return service.create(request);
+    }
+
+    @PostMapping("/restore")
+    public UserResponse restore(
+            @Valid
+            @RequestBody RestoreUserRequest request){
+        return service.restore(request.email());
     }
 
     @GetMapping("/{userId}")

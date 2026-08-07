@@ -14,3 +14,8 @@ from terminal in backend folder:
 3. taskkill /F /IM java.exe --> it ends that process
 4. netstat -ano | findstr :8080 --> this time it shouldn't see anything.
 5. run the application
+
+
+IL PROBLEMA ERA MAVEN.
+avevo avuto un problema con il wrapper e avevo flaggato un'opzione in settings -> build tools -> runner -> maven -> delegate IDE build/run actions to maven.
+tolto quell flag, è andato tutto a posto

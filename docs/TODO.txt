@@ -1,1 +1,3 @@
 
+check create in postman.
+if i create a user and then create it again, i get a very long log where the message is correct. i don't want to see the long error but only the message

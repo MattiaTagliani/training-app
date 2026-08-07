@@ -1,5 +1,8 @@
 package com.trainingapp.backend.user.service;
 
+import com.trainingapp.backend.common.exception.EmailAlreadyExistsException;
+import com.trainingapp.backend.common.exception.UserAlreadyActiveException;
+import com.trainingapp.backend.common.exception.UserNotDeletedException;
 import com.trainingapp.backend.common.exception.UserNotFoundException;
 import com.trainingapp.backend.user.dto.CreateUserRequest;
 import com.trainingapp.backend.user.dto.UserResponse;
@@ -7,11 +10,13 @@ import com.trainingapp.backend.user.entity.User;
 import com.trainingapp.backend.user.entity.UserStatus;
 import com.trainingapp.backend.user.mapper.UserMapper;
 import com.trainingapp.backend.user.repository.UserRepository;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,9 +29,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponse create(CreateUserRequest request) {
 
-//        User user = mapper.toEntity(request);
-//        User savedUser = repository.save(user);
-//        return mapper.toResponse(savedUser);
+        Optional<User> existing = repository.findByEmail(request.email());
+
+        if(existing.isPresent()){
+            throw new EmailAlreadyExistsException(request.email());
+        }
 
         User user = User.builder()
                 .firstName(request.firstName())
@@ -36,9 +43,26 @@ public class UserServiceImpl implements UserService{
                 .status(UserStatus.ACTIVE)
                 .build();
 
-        repository.save(user);
+        User savedUser = repository.save(user);
 
-        return mapper.toResponse(user);
+        return mapper.toResponse(savedUser);
+    }
+
+    @Override
+    public UserResponse restore(String email) {
+
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        if(user.getStatus() != UserStatus.DELETED){
+            throw new UserNotDeletedException(email);
+        }
+
+        user.setStatus(UserStatus.ACTIVE);
+
+        User restoredUser = repository.save(user);
+
+        return mapper.toResponse(restoredUser);
     }
 
     @Override

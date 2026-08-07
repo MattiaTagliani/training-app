@@ -7,7 +7,7 @@ CREATE TABLE "users" (
   "email" varchar (255) NOT NULL UNIQUE,
   "password" varchar (255) NOT NULL,
 
-  "status" user_status NOT NULL DEFAULT 'ACTIVE',
+  "status" user_status NOT NULL DEFAULT 'PENDING',
 
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
   "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now()

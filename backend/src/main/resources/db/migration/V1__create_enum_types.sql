@@ -64,7 +64,8 @@ CREATE TYPE media_purpose AS ENUM
 );
 
 CREATE TYPE user_status AS ENUM (
+    'PENDING',
     'ACTIVE',
     'INACTIVE',
     'DELETED'
-)
+);
