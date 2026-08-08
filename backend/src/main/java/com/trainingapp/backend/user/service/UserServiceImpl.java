@@ -86,6 +86,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserResponse> getAll(UserStatus status) {
+
+        return repository.findAllByStatus(status)
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+
+    }
+
+    @Override
     public void delete(UUID userId) {
 
         User user = repository.findById(userId)
