@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RestoreUserRequest(
 
-        @NotBlank
-        @Email
+        @Email(message = "Email must be valid")
+        @NotBlank(message = "Email is required")
         String email
 ) {
 }
