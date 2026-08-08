@@ -1,7 +1,6 @@
 package com.trainingapp.backend.user.service;
 
 import com.trainingapp.backend.common.exception.EmailAlreadyExistsException;
-import com.trainingapp.backend.common.exception.UserAlreadyActiveException;
 import com.trainingapp.backend.common.exception.UserNotDeletedException;
 import com.trainingapp.backend.common.exception.UserNotFoundException;
 import com.trainingapp.backend.user.dto.CreateUserRequest;
