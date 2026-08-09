@@ -233,8 +233,8 @@ public class UserServiceImplTest {
 
         User user = User.builder()
                 .userId(UUID.randomUUID())
-                .firstName("John")
-                .lastName("Doe")
+                .firstName("ciao")
+                .lastName("betti")
                 .email(email)
                 .password("password")
                 .status(UserStatus.ACTIVE)

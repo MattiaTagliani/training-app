@@ -1,0 +1,10 @@
+Situation						Typical status
+Successful GET/POST/etc.				200 OK
+Resource successfully created				201 Created
+Successful DELETE with no body				204 No Content
+Invalid request / validation				400 Bad Request
+Not authenticated					401 Unauthorized
+Authenticated but not allowed				403 Forbidden
+Resource doesn't exist					404 Not Found
+State conflicts / duplicate resource			409 Conflict
+Unexpected server error					500 Internal Server Error

@@ -1,3 +1,14 @@
-
-check create in postman.
-if i create a user and then create it again, i get a very long log where the message is correct. i don't want to see the long error but only the message
+1. *OK* Backend runs locally
+2. *OK* PostgreSQL/Flyway works
+3. *OK* Postman CRUD tests
+4. *OK* Unit tests ← YOU ARE HERE
+5. *OK* Global exception handling
+6. *OK* Validation/error responses
+7. *OK* Dockerize backend
+8. *OK* Docker Compose: backend + PostgreSQL
+9. *OK* Run the entire application from Docker
+10. *WORKING ON* Set up CI/CD
+11. *TODO* Deploy a development/staging environment
+12. *TODO* Frontend
+13. *TODO* Connect frontend → deployed backend
+14. *TODO* Production deployment
