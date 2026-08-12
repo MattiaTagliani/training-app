@@ -1,14 +1,28 @@
 1. *OK* Backend runs locally
 2. *OK* PostgreSQL/Flyway works
 3. *OK* Postman CRUD tests
-4. *OK* Unit tests ← YOU ARE HERE
+4. *OK* Unit tests
 5. *OK* Global exception handling
 6. *OK* Validation/error responses
 7. *OK* Dockerize backend
 8. *OK* Docker Compose: backend + PostgreSQL
 9. *OK* Run the entire application from Docker
-10. *WORKING ON* Set up CI/CD
-11. *TODO* Deploy a development/staging environment
+10. *OK* Set up CI/CD
+11. *WORKING ON* Deploy a development/staging environment
 12. *TODO* Frontend
 13. *TODO* Connect frontend → deployed backend
 14. *TODO* Production deployment
+
+
+
+
+
+when setting up CI, the BackendApplicationTests need to connect to PostgresSQL but right now nothing is saying 
+to start the postgres db.
+	[
+	when it says run: ./mvnw test -> is telling maven to run all tests, including BackendApplicationTests.contextLoads
+	that test start spring boot, which start flyway, which tries to connect to localhost:5432
+	but there is no postgressql running on the github runner
+	]
+it can be automated with Testcontainers but right now it's unnecessary complicated so i'm making the ci.yml workflow
+start a postgres server before running the tests
