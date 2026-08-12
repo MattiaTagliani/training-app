@@ -1,7 +1,6 @@
 package com.trainingapp.backend.user.service;
 
 import com.trainingapp.backend.common.exception.EmailAlreadyExistsException;
-import com.trainingapp.backend.common.exception.UserAlreadyActiveException;
 import com.trainingapp.backend.common.exception.UserNotDeletedException;
 import com.trainingapp.backend.common.exception.UserNotFoundException;
 import com.trainingapp.backend.user.dto.CreateUserRequest;
@@ -80,6 +79,16 @@ public class UserServiceImpl implements UserService{
         return repository.findAll()
                 .stream()
                 .filter(user -> user.getStatus() == UserStatus.ACTIVE)
+                .map(mapper::toResponse)
+                .toList();
+
+    }
+
+    @Override
+    public List<UserResponse> getAll(UserStatus status) {
+
+        return repository.findAllByStatus(status)
+                .stream()
                 .map(mapper::toResponse)
                 .toList();
 

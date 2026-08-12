@@ -3,6 +3,7 @@ package com.trainingapp.backend.user.controller;
 import com.trainingapp.backend.user.dto.CreateUserRequest;
 import com.trainingapp.backend.user.dto.RestoreUserRequest;
 import com.trainingapp.backend.user.dto.UserResponse;
+import com.trainingapp.backend.user.entity.UserStatus;
 import com.trainingapp.backend.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +43,15 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponse> findAll(){
+    public List<UserResponse> findAll(
+            @RequestParam(required = false)UserStatus status){
 
-        return service.getAll();
+        if(status == null){
+            return service.getAll();
+        }
+
+
+        return service.getAll(status);
     }
 
     @DeleteMapping("/{userId}")
