@@ -21,3 +21,7 @@ postgres-data/
 
 # IntelliJ
 *.iml
+
+# Next
+node_modules/
+.next/
