@@ -1,65 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f8f6;
+  --foreground: #17231f;
+
+  --surface: #ffffff;
+  --surface-muted: #edf4f1;
+
+  --border: #d5e2dd;
+  --muted: #65756f;
+
+  --brand: #0f4c3a;
+  --brand-hover: #0b3d30;
+  --brand-soft: #e2efeb;
+  --brand-foreground: #f7fffb;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-foreground: var(--brand-foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
-header {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 16px 24px;
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
-header nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-header nav > a {
-  font-weight: 700;
-}
-
-header nav div {
-  display: flex;
-  gap: 24px;
-}
-
-header a {
+a {
   color: inherit;
   text-decoration: none;
-}
-
-header a:hover {
-  text-decoration: underline;
-}
-
-.main-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 24px;
 }

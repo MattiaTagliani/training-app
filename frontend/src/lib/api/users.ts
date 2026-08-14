@@ -5,6 +5,6 @@ export function getUsers(): Promise<User[]> {
   return apiFetch<User[]>("/api/users");
 }
 
-export function getUser(): Promise<User> {
+export function getUser(userId: string): Promise<User> {
   return apiFetch<User>(`/api/users/${userId}`);
 }
